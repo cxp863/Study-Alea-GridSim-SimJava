@@ -219,9 +219,9 @@ public class Sim_entity extends Thread implements Cloneable {
   private int state;         // 实体当前状态 The entity's current state
   private Semaphore restart; // 信号量 restart， 用来被Sim_system调度这个实体 Used by Sim_system to schedule the entity
   private Semaphore reset;   // 信号量，用来被Sim_system重置仿真 Used by Sim_system to reset the simulation
-  private List ports;        // The entitys outgoing ports
+  private List<Sim_port> ports;        // The entitys outgoing ports
   private Anim_entity aent;  // Hacky Anim_entity pointer
-  private List generators;   // The list of sample generators the entity has defined
+  private List<Generator> generators;   // The list of sample generators the entity has defined
 
   /**
    * 创建一个新的实体 Creates a new entity.
@@ -236,8 +236,8 @@ public class Sim_entity extends Thread implements Cloneable {
     state = RUNNABLE;
     restart = new Semaphore(0);
     reset = new Semaphore(0);
-    ports = new ArrayList();
-    generators = new ArrayList();
+    ports = new ArrayList<>();
+    generators = new ArrayList<>();
     aent = null;
 
     // 每次初始化的时候都向Sim_system中添加这个对象 Add this to Sim_system automatically
@@ -325,6 +325,7 @@ public class Sim_entity extends Thread implements Cloneable {
 
   /**
    * Add a port to this entity.
+   * 向实体entity添加端口port（并同时设置端口源为本实体）
    * @param port The port to add
    */
   public void add_port(Sim_port port) {
@@ -430,14 +431,13 @@ public class Sim_entity extends Thread implements Cloneable {
    * @param tag   An user-defined number representing the type of event.
    */
   public void sim_schedule(int dest, double delay, int tag) {
-    if (!Sim_system.running()) {
-      return;
-    }
-    Sim_system.send(me, dest, delay, tag, null);
+    /* edited */
+    sim_schedule(dest, delay, tag, null);
   }
 
   /**
    * Send an event to another entity through a port, with data. Note that the tag <code>9999</code> is reserved.
+   * 给定目标端口，发送一个event到另外一个实体，带信息
    * @param dest  The port to send the event through
    * @param delay How long from the current simulation time the event
    *              should be sent
@@ -445,28 +445,26 @@ public class Sim_entity extends Thread implements Cloneable {
    * @param data  The data to be sent with the event.
    */
   public void sim_schedule(Sim_port dest, double delay, int tag, Object data) {
-    if (!Sim_system.running()) {
-      return;
-    }
-    Sim_system.send(me, dest.get_dest(), delay, tag, data);
+    /* edited */
+    sim_schedule(dest.get_dest(), delay, tag, data);
   }
 
   /**
    * Send an event to another entity through a port, with <b>no</b> data. Note that the tag <code>9999</code> is reserved.
+   * 给定目标端口，发送一个event到另外一个实体，不带信息
    * @param dest  The port to send the event through
    * @param delay How long from the current simulation time the event
    *              should be sent
    * @param tag An user-defined number representing the type of event.
    */
   public void sim_schedule(Sim_port dest, double delay, int tag) {
-    if (!Sim_system.running()) {
-      return;
-    }
-    Sim_system.send(me, dest.get_dest(), delay, tag, null);
+    /* edited */
+    sim_schedule(dest.get_dest(), delay, tag);
   }
 
   /**
    * Send an event to another entity through a port with a given name, with data. Note that the tag <code>9999</code> is reserved.
+   * 给定目标端口名，发送一个event到另外一个实体，带信息
    * @param dest  The name of the port to send the event through
    * @param delay How long from the current simulation time the event
    *              should be sent
@@ -474,14 +472,13 @@ public class Sim_entity extends Thread implements Cloneable {
    * @param data  The data to be sent with the event.
    */
   public void sim_schedule(String dest, double delay, int tag, Object data) {
-    if (!Sim_system.running()) {
-      return;
-    }
-    Sim_system.send(me, get_port(dest).get_dest(), delay, tag, data);
+    /* edited */
+    sim_schedule(get_port(dest).get_dest(), delay, tag, data);
   }
 
   /**
    * Send an event to another entity through a port with a given name, with <b>no</b> data.
+   * 给定目标端口名称，发送一个event到另外一个实体，不带信息
    * Note that the tag <code>9999</code> is reserved.
    * @param dest  The name of the port to send the event through
    * @param delay How long from the current simulation time the event
@@ -489,10 +486,7 @@ public class Sim_entity extends Thread implements Cloneable {
    * @param tag   An user-defined number representing the type of event.
    */
   public void sim_schedule(String dest, double delay, int tag) {
-    if (!Sim_system.running()) {
-      return;
-    }
-    Sim_system.send(me, get_port(dest).get_dest(), delay, tag, null);
+    sim_schedule(get_port(dest).get_dest(), delay, tag);
   }
 
   /**

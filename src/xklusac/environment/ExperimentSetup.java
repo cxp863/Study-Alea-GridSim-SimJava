@@ -374,8 +374,9 @@ public class ExperimentSetup {
      */
     public static void main(String[] args) {
         String user_dir = System.getProperty("user.dir");
-        
-        Registration.register();
+
+        // 这个网站现在已经没办法访问了，注释掉省略一个Exception
+        // Registration.register();
         
         try {
             aCfg = new AleaConfiguration();
