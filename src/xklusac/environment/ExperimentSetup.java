@@ -17,7 +17,6 @@ import xklusac.algorithms.queue_based.EDF;
 import xklusac.algorithms.queue_based.multi_queue.Fairshare_EASY_Backfilling;
 import xklusac.algorithms.queue_based.SJF;
 import xklusac.algorithms.queue_based.multi_queue.FCFS;
-import alea.core.Registration;
 
 import eduni.simjava.Sim_system;
 import java.io.IOException;

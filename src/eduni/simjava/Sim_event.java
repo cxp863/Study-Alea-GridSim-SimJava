@@ -4,6 +4,7 @@ package eduni.simjava;
 
 /**
  * This class represents events which are passed between the entities in the simulation.
+ * 这个类代表在仿真当中，实体之间传递的事件
  * @see         Sim_system
  * @see         Sim_entity
  * @version     2.0, 11 July 2002
@@ -152,7 +153,9 @@ public class Sim_event implements Cloneable {
   }
   // The internal type
   int get_type() { return etype; }
+
   // Get a copy of the event
+  // 把另外一个事件拷贝到当前事件中。
   void copy(Sim_event ev) {
     ent_dst = ev.get_dest();
     ent_src = ev.get_src();

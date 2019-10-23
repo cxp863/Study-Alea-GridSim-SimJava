@@ -6,6 +6,9 @@ package eduni.simjava;
  * Predicates are used to select events from the deferred queue.
  * This class is abstract and must be subclassed when writing a new
  * predicate. Some standard predicates are provided, see below:
+ *
+ * 谓词是用来从延迟队列里面选择出事件用的。这个类是个抽象类，一些实现如下：
+ *
  * @see         eduni.simjava.Sim_type_p
  * @see         eduni.simjava.Sim_from_p
  * @see         eduni.simjava.Sim_any_p

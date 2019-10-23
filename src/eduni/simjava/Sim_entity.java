@@ -490,14 +490,26 @@ public class Sim_entity extends Thread implements Cloneable {
   }
 
   /**
+   * Send on an event to an other entity through a port.
+   * 通过端口向其他实体发送事件（无延迟，调用的是上面的sim_schedule）
+   * @param ev The event to send
+   * @param p  The port through which to send the event
+   */
+  public void send_on(Sim_event ev, Sim_port p) {
+    sim_schedule(p.get_dest(), 0.0, ev.type(), ev.get_data());
+  }
+
+  /**
    * Count how many events matching a predicate are waiting in the entity's deferred queue.
+   * 计算基于某一个谓词，有多少实体在延迟队列当中等待这个谓词对实体进行匹配处理
    * @param p The event selection predicate
    * @return  The count of matching events
    */
   public int sim_waiting(Sim_predicate p) { return Sim_system.waiting(me, p); }
 
   /**
-   * Count how many events are waiting in the entiy's deferred queue
+   * Count how many events are waiting in the entity's deferred queue
+   * 计算当前一共有多少个实体在延迟队列里面等着
    * @return The count of events
    */
   public int sim_waiting() {
@@ -506,6 +518,7 @@ public class Sim_entity extends Thread implements Cloneable {
 
   /**
    * Extract the first event matching a predicate waiting in the entity's deferred queue.
+   * 从当前延迟队列里面找到对应谓词匹配到的第一个事件
    * @param p   The event selection predicate
    * @param ev  The event matched is copied into <body>ev</body> if it points to a blank event,
    *            or discarded if <code>ev</code> is <code>null</code>
@@ -527,6 +540,7 @@ public class Sim_entity extends Thread implements Cloneable {
 
   /**
    * Cancel the first event matching a predicate waiting in the entity's future queue.
+   * 取消未来队列里面匹配某一个谓词的第一个事件
    * @param p  The event selection predicate
    * @param ev The event matched is copied into <code>ev</code> if it points to a blank event,
                or discarded if <code>ev</code> is <code>null</code>
@@ -543,6 +557,7 @@ public class Sim_entity extends Thread implements Cloneable {
 
   /**
    * Put an event back on the deferred queue.
+   * 将事件放到延迟队列队尾
    * @param ev The event to put back
    */
   public void sim_putback(Sim_event ev) {
@@ -555,6 +570,7 @@ public class Sim_entity extends Thread implements Cloneable {
   /**
    * Get the first event matching a predicate from the deferred queue, or if none match,
    * wait for a matching event to arrive.
+   * 从延迟队列里面选择匹配某一个谓词的第一个事件。如果匹配不到，那么就等着，直到能匹配到。
    * @param p    The predicate to match
    * @param ev   The event matched is copied into <code>ev</code> if it points to a blank event,
    *             or discarded if <code>ev</code> is <code>null</code>
@@ -573,6 +589,7 @@ public class Sim_entity extends Thread implements Cloneable {
   /**
    * Get the first event waiting in the entity's deferred queue, or if there are none, wait
    * for an event to arrive.
+   * 从延迟队列里面选择第一个事件，如果匹配不到，那么就等着，直到能匹配到
    * @param ev  The event matched is copied into <code>ev</code> if it points to a blank event,
    * or discarded if <code>ev</code> is <code>null</code>
    */
@@ -582,40 +599,32 @@ public class Sim_entity extends Thread implements Cloneable {
 
   /**
    * Get the id of the currently running entity
+   * 获取当前正在正在运行的实体ID（其实就是把当前ID返回回去了）
    * @return The currently running entity's id number
    */
   public int sim_current() {
     return this.get_id();
   }
 
-  /**
-   * Send on an event to an other entity through a port.
-   * @param ev The event to send
-   * @param p  The port through which to send the event
-   */
-  public void send_on(Sim_event ev, Sim_port p) {
-    sim_schedule(p.get_dest(), 0.0, ev.type(), ev.get_data());
-  }
-
-  //
   // Package level methods
-  //
+  // 以下是包一级的方法
 
-  // Package access methods
   int get_state() { return state; }
-  Sim_event get_evbuf() { return evbuf; }
+  void set_state(int state) { this.state = state; }
 
-  // Package update methods
+  Sim_event get_evbuf() { return evbuf; }
+  void set_evbuf(Sim_event e) { evbuf = e; }
+
+  // restart是个信号量。
   void restart() { restart.v(); }
   void set_going() { restart.v(); }
-  void set_state(int state) { this.state = state; }
+
   void set_id(int id) { me = id; }
-  void set_evbuf(Sim_event e) { evbuf = e; }
-  void poison() {
-    // Not used anymore
-  }
+
+  void poison() { /* Not used anymore */}
 
   // Statistics update methods
+  // 统计函数更新
 
   // Used to update default measures after an ARRIVAL event has occured
   void update(int type, int tag, double time_occured) {
@@ -946,8 +955,9 @@ public class Sim_entity extends Thread implements Cloneable {
 
   /**
    * Wait for an event matching a specific predicate. This method doesn't check the entity's deferred queue.
+   * 等待一个匹配指定谓词的事件，这个方法并不监测等待实体队列
    * <p>
-   * Since 2.0 <code>Sim_syztem</code> checks the predicate for the entity. This avoids unnecessary context
+   * Since 2.0 <code>Sim_system</code> checks the predicate for the entity. This avoids unnecessary context
    * switches for non-matching events.
    * @param p  The predicate to match
    * @param ev The event to which the arriving event will be copied to
