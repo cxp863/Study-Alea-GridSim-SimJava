@@ -221,7 +221,8 @@ public class Sim_entity extends Thread implements Cloneable {
   private Semaphore reset;   // 信号量，用来被Sim_system重置仿真 Used by Sim_system to reset the simulation
   private List<Sim_port> ports;        // The entitys outgoing ports
   private Anim_entity aent;  // Hacky Anim_entity pointer
-  private List<Generator> generators;   // The list of sample generators the entity has defined
+  private List<Generator> generators;   // Generator列表。实际上是一个随机数产生器。泛型是我自己写的
+                                        // The list of sample generators the entity has defined
 
   /**
    * 创建一个新的实体 Creates a new entity.
@@ -626,17 +627,19 @@ public class Sim_entity extends Thread implements Cloneable {
   // Statistics update methods
   // 统计函数更新
 
-  // Used to update default measures after an ARRIVAL event has occured
+  // Used to update default measures after an ARRIVAL event has occurred
   void update(int type, int tag, double time_occured) {
     if (stat != null) stat.update(type, tag, time_occured);
   }
 
   // Used to tidy up the statistics gatherer for this entity.
+  // 用于整理该实体的统计信息收集器。
   void tidy_up_stat() {
     if (stat != null) stat.tidy_up();
   }
 
   // Used to check if the entity is gathering statistics
+  // 判断实体是否存在统计信息类
   boolean has_stat() {
     return (stat != null);
   }
@@ -646,6 +649,7 @@ public class Sim_entity extends Thread implements Cloneable {
    * as an output analysis method. Clones or backups of the entities are made in the beginning
    * of the simulation in order to reset the entities for each subsequent replication. This method
    * should not be called by the user.
+   * 获取一份实体拷贝。虽然传回来的是Object对象，但是实际上仍然是Sim_entity类型。这个方法不应该被用户调用。
    * @return A clone of the entity
    */
   protected Object clone() throws CloneNotSupportedException {
@@ -655,23 +659,20 @@ public class Sim_entity extends Thread implements Cloneable {
     return copy;
   }
 
-  // Used to set a cloned entity's name
+  // 设置实体名称 Used to set a cloned entity's name
   private void set_name(String new_name) { name = new_name; }
 
-  // Resets the statistics gatherer of this entity
+  // 重置统计信息，并且重置所有随机数生成器的种子 Resets the statistics gatherer of this entity
   void reset() {
     if (stat != null) {
       stat.reset();
     }
-    int size = generators.size();
-    for (int i=0; i < size; i++) {
-      Generator generator = (Generator)generators.get(i);
-      generator.set_seed(Sim_system.next_seed());
-    }
+    reseed_generators();
   }
 
   /**
-   * Executes the entity's thread. This is an internal method and should not be overriden in
+   * 执行实体线程。这是个内部方法并且不应该在子类中被覆写
+   * Executes the entity's thread. This is an internal method and should not be overridden in
    * subclasses.
    */
   public final void run() {
@@ -683,6 +684,7 @@ public class Sim_entity extends Thread implements Cloneable {
   }
 
   /**
+   * 添加随机数生成器到集合里面。后面的解释看不懂。。
    * Add a sample generator to this entity. This method is used in order to allow <code>Sim_system</code>
    * to reseed the generator. This is performed when independent replications have been selected
    * as an output analysis method. If this method is not used for a generator then the seed used in the
@@ -693,6 +695,7 @@ public class Sim_entity extends Thread implements Cloneable {
     generators.add(generator);
   }
 
+  // 重新为所有的随机数生成器设置随机数种子。
   // Reseed the generators of this entity
   void reseed_generators() {
     int size = generators.size();
@@ -771,6 +774,7 @@ public class Sim_entity extends Thread implements Cloneable {
   }
 
   /**
+   *
    * Set the entity to be active for a time period or until it is interrupted by the
    * arrival of an event. Note that the entity will be interrupted only by <b>future</b>
    * events.
