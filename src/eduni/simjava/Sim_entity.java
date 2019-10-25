@@ -774,7 +774,7 @@ public class Sim_entity extends Thread implements Cloneable {
   }
 
   /**
-   *
+   * 激活一个实体一段时间，直到这个实体被到来的时间打断。
    * Set the entity to be active for a time period or until it is interrupted by the
    * arrival of an event. Note that the entity will be interrupted only by <b>future</b>
    * events.
@@ -794,6 +794,7 @@ public class Sim_entity extends Thread implements Cloneable {
   }
 
   /**
+   * todo: 这个函数具体含义和实现，还得看看。
    * Set the entity to be active for a time period or until it is interrupted by the
    * arrival of an event matching a predicate. Note that the entity will be interrupted only
    * by <b>future</b> events.
@@ -838,6 +839,7 @@ public class Sim_entity extends Thread implements Cloneable {
   // PAUSE METHODS
 
   /**
+   * 设置实体在一段时间内为非活动状态。
    * Set the entity to be inactive for a time period.
    * @param delay The time period for which the entity will be inactive
    */
@@ -854,6 +856,7 @@ public class Sim_entity extends Thread implements Cloneable {
   }
 
   /**
+   * 设置实体为非活动状态，直到某一事件event到来打断它
    * Set the entity to be inactive until it receives an event. Note that the
    * entity will be interrupted only by <b>future</b> events.
    * @param ev    The event to which the arriving event will be copied to
@@ -866,6 +869,7 @@ public class Sim_entity extends Thread implements Cloneable {
   }
 
   /**
+   * 设置实体为非活动状态，直到匹配某一个谓词的事件event到来打断它
    * Set the entity to eb inactive until it receives an event matching a specific predicate.
    * Note that the entity will be interrupted only by <b>future</b> events.
    * @param p  The predicate to match
@@ -882,6 +886,7 @@ public class Sim_entity extends Thread implements Cloneable {
   }
 
   /**
+   * 设置本实体为非活动状态，直到时间超过设置，或者某一个事件event到来打断了它。
    * Set the entity to be inactive for a time period or until it is interrupted by the arrival of an event.
    * Note that the entity will be interrupted only by <b>future</b> events.
    * @param delay The time period for which the entity will be inactive unless interrupted
@@ -934,6 +939,7 @@ public class Sim_entity extends Thread implements Cloneable {
   // WAIT METHODS
 
   /**
+   * 等待事件到来，注意这个方法并没有监测实体的延迟队列
    * Wait for an event to arrive. Note that this method doesn't check the entity's deferred queue.
    * @param ev The event to which the arriving event will be copied to
    */
@@ -989,6 +995,7 @@ public class Sim_entity extends Thread implements Cloneable {
 
   /**
    * Wait for an event to arrive or until a time period elapsed. This method doesn't check the entity's deferred queue.
+   * 等待一个事件event，或者直到超时或者。
    * @param delay The maximum time to wait
    * @param ev The event to which the arrving event will be copied to
    * @return The time remaining when the arrival occured
@@ -1003,6 +1010,7 @@ public class Sim_entity extends Thread implements Cloneable {
 
   /**
    * Wait for an event matching a specific predicate to arrive or until a time period elapses.
+   * 等待一个匹配某一个谓词的事件到来，或者超时。
    * This method doesn't check the entity's deferred queue.
    * @param p  The predicate to match
    * @param delay The maximum time period for which to wait
