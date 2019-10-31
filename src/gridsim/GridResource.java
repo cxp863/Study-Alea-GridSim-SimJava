@@ -156,9 +156,11 @@ public class GridResource extends GridSimCore
      *                      ResourceCalendar, AllocPolicy)}
      * and then overrides {@link #processOtherEvent(Sim_event)}.
      *
-     * @param name       the name to be associated with this entity (as
+     * @param name       本实体的名字（Sim_entity需要设置这个）
+     *                   the name to be associated with this entity (as
      *                   required by Sim_entity class from simjava package)
-     * @param baud_rate  network communication or bandwidth speed
+     * @param baud_rate  网络带宽（什么单位啊？提都不提，就是这么霸气）
+     *                   network communication or bandwidth speed
      * @param seed       the initial seed
      * @param resource   an object of ResourceCharacteristics
      * @param peakLoad   the load during peak times

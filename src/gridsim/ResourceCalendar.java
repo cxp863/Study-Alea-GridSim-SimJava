@@ -45,7 +45,7 @@ public class ResourceCalendar
      *                              with range: [0 ... 1]
      * @param weekendList   a list of Integer numbers for weekends
      * @param holidayList   a list of Integer numbers for holidays
-     * @param seed          the initial seed
+     * @param seed          the initial random seed
      * @pre timeZone >= 0.0
      * @pre seed > 0
      * @post $none
@@ -54,8 +54,8 @@ public class ResourceCalendar
                 double offPeakLoad, double relativeHolidayLoad,
                 LinkedList weekendList, LinkedList holidayList, long seed)
     {
-        // initialised as per common observation of relative local
-        // usage behavior of resource per hour in a day
+        // 根据一天中每小时本地资源的常规相对使用行为的初始化观察值。这个值是用来标识网格资源的背景负载的
+        // initialised as per common observation of relative local usage behavior of resource per hour in a day
         // NOTE: This is similar to background load of a resource
         double[] regularLoad = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   // 0 - 6 am
                                  0.0, 0.1, 0.2, 0.4, 0.8, 1.0,   // 7 - 11 am
@@ -140,10 +140,8 @@ public class ResourceCalendar
         weekdayLoad_ = new double[HOUR];  // background load during weekdays
         holidayLoad_ = new double[HOUR];  // background load during holidays
 
-        // for each hour in a day, determine the load during the weekday and
-        // holiday
-        for (int i = 0; i < regularLoad.length; i++)
-        {
+        // for each hour in a day, determine the load during the weekday and holiday
+        for (int i = 0; i < regularLoad.length; i++) {
             val = regularLoad[i] * (peakLoad - offPeakLoad) + offPeakLoad;
 
             // background load during the week
@@ -165,14 +163,12 @@ public class ResourceCalendar
             }
         }
 
-        if (regularLoad.length < HOUR)
-        {
+        if (regularLoad.length < HOUR) {
             System.out.println("ResourceCalendar(): Warning regularLoad[] must" +
                 " be for 24 hours.\nThe loads in the remaining hours will set to zeros.");
 
             // then set remaining loads to zero
-            for (int i = regularLoad.length; i < HOUR; i++)
-            {
+            for (int i = regularLoad.length; i < HOUR; i++) {
                 weekdayLoad_[i] = 0;
                 holidayLoad_[i] = 0;
 

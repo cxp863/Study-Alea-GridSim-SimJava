@@ -53,15 +53,18 @@ public class ResourceCharacteristics
     public static final int ADVANCE_RESERVATION = 4;
 
     /**
+     * 创建一个资源特性对象。如果时区设置的不对，就会被重置为0
+     * 注意这个构造函数只把ID设置成了-1。ID会在资源分配的时候再次被设置（存疑）
      * Allocates a new ResourceCharacteristics object.
      * If the time zone is invalid, then by default, it will be GMT+0.
-     * @param architecture  the architecture of a resource
+     * @param architecture    the architecture of a resource
      * @param OS            the operating system used
      * @param machineList   list of machines in a resource
-     * @param allocationPolicy     the resource allocation policy
-     * @param timeZone   local time zone of a user that owns this reservation.
+     * @param allocationPolicy     资源分配策略 the resource allocation policy
+     * @param timeZone
+     *                   local time zone of a user that owns this reservation.
      *                   Time zone should be of range [GMT-12 ... GMT+13]
-     * @param costPerSec    the cost per sec to use this resource
+     * @param costPerSec  每秒使用该资源的花费 the cost per sec to use this resource
      * @pre architecture != null
      * @pre OS != null
      * @pre machineList != null
@@ -83,8 +86,7 @@ public class ResourceCharacteristics
 
         if (!AdvanceReservation.validateTimeZone(timeZone)) {
             this.timeZone_ = 0.0;
-        }
-        else {
+        } else {
             this.timeZone_ = timeZone;
         }
     }

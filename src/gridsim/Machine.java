@@ -17,7 +17,7 @@ import java.util.Iterator;
  * GridSim Machine class represents an uniprocessor or shared memory
  * multiprocessor machine. It can contain one or more Processing Elements (PEs).
  *
- * GridSim Machine类表示单处理器或共享内存的多处理器计算机。 它可以包含一个或多个处理元素（PE）。
+ * GridSim Machine类表示单处理器或共享内存的多处理器计算机。 它可以包含一个或多个处理单元（PE）。
  *
  * @author       Manzur Murshed and Rajkumar Buyya
  * @since        GridSim Toolkit 1.0
