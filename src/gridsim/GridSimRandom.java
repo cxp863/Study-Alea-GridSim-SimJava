@@ -285,13 +285,12 @@ public class GridSimRandom
      * @pre randDouble >= 0.0 && randDouble <= 1.0
      * @post $none
      */
-    public static double real(double value, double lessFactor,
-                double moreFactor, double randDouble)
-                throws IllegalArgumentException
-    {
+    public static double real(double value, double lessFactor, double moreFactor, double randDouble)
+            throws IllegalArgumentException {
+        // 在value这个值附近，小最多小到value*(1-LessFactor)，大最多大到value*(1+moreFactor)，在这个范围
+        // 内部取值，通过randDouble控制。这个值等于0就区到最小值，等于1就取到最大值。
         String errorMsg = "GridSimRandom.real(): Error - ";
-        if (value < MIN_VALUE)
-        {
+        if (value < MIN_VALUE) {
             throw new IllegalArgumentException(errorMsg +
                     "value must be zero or positive value.");
         }

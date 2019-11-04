@@ -12,14 +12,14 @@ import java.util.LinkedList;
 
 /**
  * GridSim ResourceUserList maintains a linked-list of Grid Resource users
- * ResourceUserList 维护一个 Grid Resource users 链表
+ * ResourceUserList 维护一个 Grid Resource users 链表，它继承了LinkedList类，
+ * 虽然它说自己维护了Grid Resource 链表，实际上只维护了整数类型的用户ID
  *
  * @author       Manzur Murshed and Rajkumar Buyya
  * @since        GridSim Toolkit 1.0
  * @invariant $none
  */
-public class ResourceUserList extends LinkedList
-{
+public class ResourceUserList extends LinkedList<Integer> {
 
 	/**
      * Adds one Grid Resource user into the list.
@@ -28,17 +28,17 @@ public class ResourceUserList extends LinkedList
      * @pre userID >= 0
      * @post $result == true || $result == false
      */
-    public boolean add(int userID)
-    {
-        Integer user = new Integer(userID);
+    public boolean add(int userID) {
+        Integer user = userID;
 
+        // 其实这里装箱时没有任何必要的，contains只接受Object，这时候基本类型int会被包装成Integer再传入的
         // check whether the user has already stored into the list
-        if (this.contains(user)) {
+        if (super.contains(user)) {
             return false;
+        } else {
+            super.add(user);
+            return true;
         }
-
-        this.add(user);
-        return true;
     }
 
     /**
