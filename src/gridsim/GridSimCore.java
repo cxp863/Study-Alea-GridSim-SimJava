@@ -263,6 +263,7 @@ public class GridSimCore extends Sim_entity
 
 
     /**
+     * 分配一个没有网络通信输入输出接口的网格对象。总之，没有网络通信接口和带宽。
      * Allocates a new GridSim object
      * <b>without</b> NETWORK communication channels: "input" and
      * "output" Sim_port. In summary, this object has <tt>NO</tt>
@@ -288,6 +289,8 @@ public class GridSimCore extends Sim_entity
     }
 
     /**
+     * 分配一个有输入输出网络通信接口的网格对象。
+     * 但是这个是旧的方法，生成的网络连接是一个one-to-all这种类型的，无法指定。
      * Allocates a new GridSim object
      * <b>with</b> NETWORK communication channels: "input" and
      * "output" Sim_port. In addition, this method will create <tt>Input</tt>
@@ -368,6 +371,8 @@ public class GridSimCore extends Sim_entity
     }
     
     /**
+     * 通过网络类型创建输入输出实体。
+     * todo 研究一下具体实现
      * Creates Input and Output entities according to the network type
      * @param name       the name to be associated with this entity (as
      *                   required by Sim_entity class from simjava package)
@@ -715,6 +720,8 @@ public class GridSimCore extends Sim_entity
     }
 
     /**
+     * 终止管理网络通信通道的实体。 可以显式调用它以关闭NETWORK通信通道。
+     * 建议对所有扩展GridSim类的实体，显式调用此方法以终止创建的Input和Output实体
      * It terminates Entities managing NETWORK communication channels.
      * It can be invoked explicity to shutdown NETWORK communication channels.
      * It is advisable for all entities extending GridSim class, explicitly
@@ -727,8 +734,7 @@ public class GridSimCore extends Sim_entity
     protected void terminateIOEntities()
     {
         // If it is Networked entity and Not yet terminated, then terminate.
-        if ( isNetworked() && !terminateIOEntitiesFlag_ )
-        {
+        if ( isNetworked() && !terminateIOEntitiesFlag_ ) {
             // Send END_OF_SIMULATION to Input entity
             send(input, 0.0, GridSimTags.END_OF_SIMULATION);
 
@@ -928,22 +934,16 @@ public class GridSimCore extends Sim_entity
      * @pre delay >= 0.0
      * @post $none
      */
-    protected void send(int entityID, double delay, int gridSimTag)
-    {
+    protected void send(int entityID, double delay, int gridSimTag) {
         if (entityID < 0) {
+            System.out.println(super.get_name() + ".send(): Error - " +
+                    "invalid entity id " + entityID);
             return;
         }
 
         // if delay is -ve, then it doesn't make sense. So resets to 0.0
         if (delay < 0.0) {
             delay = 0.0;
-        }
-
-        if (entityID < 0)
-        {
-            System.out.println(super.get_name() + ".send(): Error - " +
-                "invalid entity id " + entityID);
-            return;
         }
 
         super.sim_schedule(entityID, delay, gridSimTag);
@@ -991,22 +991,16 @@ public class GridSimCore extends Sim_entity
      * @pre data != null
      * @post $none
      */
-    protected void send(int entityID, double delay, int gridSimTag, Object data)
-    {
+    protected void send(int entityID, double delay, int gridSimTag, Object data) {
         if (entityID < 0) {
+            System.out.println(super.get_name() + ".send(): Error - " +
+                    "invalid entity id " + entityID);
             return;
         }
 
         // if delay is -ve, then it doesn't make sense. So resets to 0.0
         if (delay < 0.0) {
             delay = 0.0;
-        }
-
-        if (entityID < 0)
-        {
-            System.out.println(super.get_name() + ".send(): Error - " +
-                "invalid entity id " + entityID);
-            return;
         }
 
         super.sim_schedule(entityID, delay, gridSimTag, data);
