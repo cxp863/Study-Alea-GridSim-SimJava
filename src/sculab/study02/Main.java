@@ -10,7 +10,7 @@ import java.util.Random;
  * 创建任务和任务列表
  * 示例不创建任何仿真，只创建任务，所以不需要初始化GridSim。
  */
-public class Study {
+public class Main {
     public static void main(String[] args) {
         try {
             GridletList gridlets = createGridLet();

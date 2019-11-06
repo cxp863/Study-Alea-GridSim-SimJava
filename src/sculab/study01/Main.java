@@ -8,7 +8,7 @@ import java.util.LinkedList;
 /**
  * 创建一个包含三个机器的网格资源
  */
-public class Study {
+public class Main {
     public static void main(String[] args) {
         try {
             initGridSim();
