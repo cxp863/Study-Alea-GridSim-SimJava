@@ -5,7 +5,9 @@ import gridsim.GridSimTags;
 import gridsim.Gridlet;
 import gridsim.GridletList;
 
-
+/**
+ * 发送实体
+ */
 public class Sender extends GridSim {
     private String echoerName;
     private GridletList gridlets;

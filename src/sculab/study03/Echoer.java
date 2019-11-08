@@ -6,7 +6,7 @@ import gridsim.GridSimTags;
 import gridsim.Gridlet;
 
 /**
- * Echoer接收一个
+ * Echoer接收一个网格任务，改变状态之后再传送回去
  */
 public class Echoer extends GridSim {
     // 构造函数

@@ -18,7 +18,7 @@ public class Main {
         }
     }
 
-    public static void initGridSim() throws Exception {
+    private static void initGridSim() throws Exception {
         // 内部计时器，用来记录仿真的开始与结束时间
         Calendar calendar = Calendar.getInstance();
         // 统计过程中，不包含在内的文件名称和处理过程名称。
@@ -29,7 +29,7 @@ public class Main {
         GridSim.init(0, calendar, true, excludeFiles, excludeProcessing, null);
     }
 
-    public static GridResource createGridResource() throws Exception{
+    private static GridResource createGridResource() throws Exception{
         // 创建机器列表，并添加机器（提供机器的id，CPU数量，MIPS值）。PS：这个机器似乎没地方设置内存数量？
         MachineList machines = new MachineList();
         machines.add(new Machine(0, 4, 538));

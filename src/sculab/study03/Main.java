@@ -5,6 +5,10 @@ import gridsim.*;
 import java.util.Calendar;
 import java.util.Random;
 
+
+/**
+ * 一个简单的程序，用来描述两个GridSim实体之间如何互相联系的
+ */
 public class Main {
     public static void main(String[] args) {
         try {
